@@ -1,0 +1,40 @@
+int enPin = 3;            //Power out
+int M1 = 10;               //motor1          
+int M2 = 11;                //motor2
+int sDir = 7;              //switch direction
+int potPin = A0;           //ana in
+ 
+void setup()
+{
+ pinMode(M1, OUTPUT);
+ pinMode(M2, OUTPUT);
+ pinMode(enPin, OUTPUT);
+ pinMode(sDir, INPUT_PULLUP);
+ Serial.begin(9600);
+}
+ 
+void loop()
+{
+ int speed = analogRead(potPin) / 4;    //modify speed
+ boolean reverse = digitalRead(sDir);   //dir state
+ setMotor(speed, reverse);              //(anar, boolean)
+}
+ 
+void setMotor(int speed, boolean reverse) 
+{
+  // Set the speed of the motor
+ analogWrite(enPin, speed);
+ Serial.print(speed);
+ Serial.print(", ");
+ Serial.println(reverse);
+ // If we should go reverse
+ if (reverse) {
+  digitalWrite(M1, HIGH);
+  digitalWrite(M2, LOW);
+ } else {
+  digitalWrite(M1, LOW);
+  // THIS IS THE PROBLEM!!!!!
+  digitalWrite(M2, HIGH);
+ }
+
+}
