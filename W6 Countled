@@ -1,0 +1,81 @@
+int enPin = 3;            //Power out
+int M1 = 10;               //motor1          
+int M2 = 11;                //motor2
+int sDir = 4;              //switch direction
+int potPin = A0;           //ana in
+boolean last_stat = HIGH;
+int counter = 0;
+int ledPin = 13;
+ 
+void setup()
+{
+ pinMode(M1, OUTPUT);
+ pinMode(M2, OUTPUT);
+ pinMode(enPin, OUTPUT);
+ pinMode(sDir, INPUT_PULLUP);
+ pinMode(ledPin, OUTPUT);
+ Serial.begin(9600);
+ int speed = 200;
+}
+ 
+void loop()
+{
+ int speed = 00;    //modify speed
+ boolean reverse;
+// setMotor(speed, reverse);   //(anar, boolean)
+ int state = analogRead(potPin);
+    if (state >= 515){
+    setMotor(speed, reverse);
+    countP();
+      } else if (state <=509){
+     setMotor(speed, !reverse);
+     countM();
+      } else {
+      speed = 0;
+    }
+boolean stat = digitalRead(sDir);
+Serial.print("/");
+Serial.print(stat);
+Serial.print("/");
+Serial.print(counter);
+
+if (counter >=5){
+  blinkLed();
+  counter = 0;
+  }
+}
+ 
+void setMotor(int speed, boolean reverse) //function setMotor
+{
+ analogWrite(enPin, speed);
+ digitalWrite(M1, ! reverse);
+ digitalWrite(M2, reverse);
+}
+
+void countP(){
+  boolean stat = digitalRead(sDir);
+  if(stat != last_stat && stat == LOW){
+    counter+=1;
+  }
+last_stat = stat;
+}
+
+
+void countM(){
+  boolean stat = digitalRead(sDir);
+  if(stat!= last_stat && stat == LOW){
+    counter = counter - 1;
+  }
+  last_stat = stat;
+}
+
+void blinkLed(){
+  for (int i=0; i<10; i++){
+    digitalWrite (ledPin, HIGH);
+    delay(200);
+    digitalWrite (ledPin, LOW);
+    delay(200);
+  }
+}
+
+
