@@ -19,7 +19,6 @@ void setup()
    pinMode(led1, OUTPUT);
    led1State = LOW;
     led2State = LOW;
-    led3State = LOW;
    
 }
 
@@ -27,7 +26,7 @@ void loop()
 {
   digitalWrite (led1, led1State);
   digitalWrite (led2, led2State);
-  digitalWrite (led3, led3State);
+
   
   CSread();                         
   delay(100);
@@ -52,9 +51,7 @@ void CSread() {
  // else if (csSum >= 30000){
  //   led2State = HIGH;
  // }
- // else if (csSum >= 60000){
- //   led3State = HIGH;
- // }
+
   else {
     //led2State = LOW;
     Serial.print("NOT TOUCHING");
